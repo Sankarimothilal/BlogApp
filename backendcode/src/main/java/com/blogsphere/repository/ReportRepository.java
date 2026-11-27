@@ -1,0 +1,21 @@
+package com.blogsphere.repository;
+
+import com.blogsphere.entity.Report;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+public interface ReportRepository extends JpaRepository<Report, Long> {
+    List<Report> findByStatusOrderByCreatedAtDesc(String status);
+    List<Report> findAllByOrderByCreatedAtDesc();
+    long countByStatus(String status);
+
+    @Modifying
+    @Query("DELETE FROM Report r WHERE r.post.id = :postId")
+    void deleteForPost(@Param("postId") Long postId);
+}

@@ -1,0 +1,67 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: blogsphere-backend
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+            scope:
+              - openid
+              - profile
+              - email
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/blogsphere_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    username: ${BLOGSPHERE_DB_USERNAME}
+    password: ${BLOGSPHERE_DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect
+
+  servlet:
+    multipart:
+      max-file-size: 15MB
+      max-request-size: 15MB
+
+  mail:
+    host: ${SPRING_MAIL_HOST:smtp.gmail.com}
+    port: ${SPRING_MAIL_PORT:587}
+    # Set these in the shell; use a Gmail App Password rather than an account password.
+    username: ${MAIL_USERNAME:}
+    password: ${MAIL_PASSWORD:}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+
+blogsphere:
+  oauth2:
+    # Set this to the actual frontend dashboard URL (the token is passed in the URL fragment).
+    dashboard-url: ${BLOGSPHERE_DASHBOARD_URL:http://localhost:5500/frontend/dashboard.html}
+    failure-url: ${BLOGSPHERE_LOGIN_URL:http://localhost:5500/login.html?error=google_login}
+  jwt:
+    # 256-bit base64 secret key
+    secret: ${BLOGSPHERE_JWT_SECRET}
+    expiration-ms: 86400000 # 24 hours
+  upload:
+    dir: uploads

@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BlogSphere - Create New Blog</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <!-- Top Navbar -->
+  <header class="navbar" id="main-navbar"></header>
+
+  <main class="main-content">
+    <div class="container" style="max-width: 860px;">
+      
+      <!-- Editor Container (Screen 6 Mockup) -->
+      <div class="editor-container">
+        <h2 class="editor-header">Create New Blog</h2>
+
+        <div id="editor-msg" style="display:none; padding:10px; border-radius:6px; font-size:0.88rem; margin-bottom:16px;"></div>
+
+        <form id="blog-form">
+          <!-- Title Input -->
+          <div class="form-group">
+            <label for="post-title">Title</label>
+            <input type="text" id="post-title" placeholder="Enter blog title" required>
+          </div>
+
+          <!-- Category & Tags (2 columns) -->
+          <div class="editor-grid-2">
+            <div class="form-group">
+              <label for="post-category">Category</label>
+              <select id="post-category">
+                <option value="Technology">Technology</option>
+                <option value="Education">Education</option>
+                <option value="Business">Business</option>
+                <option value="Lifestyle">Lifestyle</option>
+                <option value="Travel">Travel</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="post-tags">Tags (comma separated)</label>
+              <input type="text" id="post-tags" placeholder="java, springboot, web">
+            </div>
+          </div>
+
+          <!-- Cover Image URL -->
+          <div class="form-group">
+            <label for="post-image">Cover Image URL (Optional)</label>
+            <input type="url" id="post-image" placeholder="https://images.unsplash.com/...">
+          </div>
+
+          <!-- Rich Text Formatting Toolbar (Screen 6 Mockup) -->
+          <div class="form-group" style="margin-bottom:0;">
+            <label>Content</label>
+            <div class="editor-toolbar">
+              <button type="button" class="toolbar-btn" onmousedown="preserveEditorSelection(event)" onclick="formatText('strong')" title="Bold"><b>B</b></button>
+              <button type="button" class="toolbar-btn" onmousedown="preserveEditorSelection(event)" onclick="formatText('em')" title="Italic"><i>I</i></button>
+              <button type="button" class="toolbar-btn" onmousedown="preserveEditorSelection(event)" onclick="formatText('u')" title="Underline"><u>U</u></button>
+              <button type="button" class="toolbar-btn" onmousedown="preserveEditorSelection(event)" onclick="formatText('s')" title="Strikethrough"><s>S</s></button>
+              <span style="border-left:1px solid var(--border-color); height:16px; margin:0 4px;"></span>
+              <button type="button" class="toolbar-btn" onmousedown="preserveEditorSelection(event)" onclick="formatBlock('h1')" title="Heading 1">H1</button>
+              <button type="button" class="toolbar-btn" onmousedown="preserveEditorSelection(event)" onclick="formatBlock('h2')" title="Heading 2">H2</button>
+              <button type="button" class="toolbar-btn" onmousedown="preserveEditorSelection(event)" onclick="formatBlock('h3')" title="Heading 3">H3</button>
+              <button type="button" class="toolbar-btn" onmousedown="preserveEditorSelection(event)" onclick="insertList('ul')" title="Bulleted list">• List</button>
+              <button type="button" class="toolbar-btn" onmousedown="preserveEditorSelection(event)" onclick="insertList('ol')" title="Numbered list">1. List</button>
+              <span style="border-left:1px solid var(--border-color); height:16px; margin:0 4px;"></span>
+              <button type="button" class="toolbar-btn" onmousedown="preserveEditorSelection(event)" onclick="insertLink()" title="Insert Link">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+              </button>
+              <button id="insert-image-button" type="button" class="toolbar-btn" onmousedown="preserveEditorSelection(event)" onclick="insertImage()" title="Upload and insert image">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+              </button>
+              <button type="button" class="toolbar-btn" onmousedown="preserveEditorSelection(event)" onclick="insertCode()" title="Code Block">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+              </button>
+            </div>
+            <div id="editor-image-msg" role="status" aria-live="polite" style="display:none; padding:8px 10px; border-radius:6px; font-size:0.85rem; margin:8px 0;"></div>
+            <input id="editor-image-file" type="file" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" hidden>
+
+            <!-- Content Editable Body -->
+            <div id="editor-body" class="editor-textarea" contenteditable="true" 
+                 style="background:var(--bg-surface); border:1px solid var(--border-color); padding:16px; min-height:220px; outline:none;"
+                 data-placeholder="Write your content here..."></div>
+          </div>
+
+          <!-- Bottom Action Buttons (Screen 6 Mockup) -->
+          <div class="editor-actions">
+            <button type="button" class="btn btn-outline" onclick="submitPost('DRAFT', this)">Save as Draft</button>
+            <button type="button" class="btn btn-primary" onclick="submitPost('PUBLISHED', this)">Publish</button>
+          </div>
+        </form>
+
+      </div>
+
+    </div>
+  </main>
+
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/common.js"></script>
+  <script>
+    let editId = null;
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      renderNavbar('create');
+
+      const urlParams = new URLSearchParams(window.location.search);
+      editId = urlParams.get('id');
+
+      if (editId) {
+        document.querySelector('.editor-header').textContent = 'Edit Blog';
+        document.title = 'BlogSphere - Edit Blog';
+
+        try {
+          const post = await API.posts.getById(editId);
+          if (post) {
+            document.getElementById('post-title').value = post.title || '';
+            if (post.category) {
+              document.getElementById('post-category').value = post.category;
+            }
+            if (post.tags) {
+              document.getElementById('post-tags').value = post.tags.join(', ');
+            }
+            if (post.coverImage) {
+              document.getElementById('post-image').value = post.coverImage;
+            }
+            if (post.contentHtml) {
+              document.getElementById('editor-body').innerHTML = post.contentHtml;
+            }
+          }
+        } catch (err) {
+          console.error('Failed to load post for editing:', err);
+        }
+      }
+    });
+
+    let savedEditorRange = null;
+
+    function editorElement() {
+      return document.getElementById('editor-body');
+    }
+
+    function rememberEditorSelection() {
+      const selection = window.getSelection();
+      const editor = editorElement();
+      if (selection && selection.rangeCount && editor.contains(selection.anchorNode)) {
+        savedEditorRange = selection.getRangeAt(0).cloneRange();
+      }
+    }
+
+    function preserveEditorSelection(event) {
+      rememberEditorSelection();
+      event.preventDefault();
+    }
+
+    function restoreEditorSelection() {
+      const editor = editorElement();
+      const selection = window.getSelection();
+      if (!selection) return null;
+      if (!savedEditorRange || !editor.contains(savedEditorRange.startContainer)) {
+        const range = document.createRange();
+        range.selectNodeContents(editor);
+        range.collapse(false);
+        savedEditorRange = range;
+      }
+      selection.removeAllRanges();
+      selection.addRange(savedEditorRange);
+      return selection.getRangeAt(0);
+    }
+
+    function insertAtSelection(node, selectContents = false) {
+      const editor = editorElement();
+      const range = restoreEditorSelection();
+      if (!range) {
+        editor.appendChild(node);
+        return;
+      }
+      range.deleteContents();
+      range.insertNode(node);
+      if (selectContents) {
+        range.selectNodeContents(node);
+      } else {
+        range.setStartAfter(node);
+        range.collapse(true);
+      }
+      savedEditorRange = range.cloneRange();
+      const selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+      editor.focus();
+    }
+
+    function formatText(tag) {
+      const range = restoreEditorSelection();
+      if (!range) return;
+      const wrapper = document.createElement(tag);
+      if (range.collapsed) {
+        insertAtSelection(wrapper, true);
+        return;
+      }
+      wrapper.appendChild(range.extractContents());
+      range.insertNode(wrapper);
+      range.selectNodeContents(wrapper);
+      savedEditorRange = range.cloneRange();
+      editorElement().focus();
+    }
+
+    function formatBlock(tag) {
+      const editor = editorElement();
+      const range = restoreEditorSelection();
+      if (!range) return;
+      const blocks = Array.from(editor.querySelectorAll('p, div, h1, h2, h3, h4, h5, h6, pre, blockquote'))
+        .filter(block => {
+          try { return range.intersectsNode(block); } catch (_) { return false; }
+        });
+      if (blocks.length) {
+        blocks.forEach(block => {
+          const replacement = document.createElement(tag);
+          while (block.firstChild) replacement.appendChild(block.firstChild);
+          block.replaceWith(replacement);
+        });
+        rememberEditorSelection();
+        return;
+      }
+      const heading = document.createElement(tag);
+      if (!range.collapsed) heading.appendChild(range.extractContents());
+      else heading.appendChild(document.createElement('br'));
+      range.insertNode(heading);
+      range.selectNodeContents(heading);
+      savedEditorRange = range.cloneRange();
+    }
+
+    function insertList(tag) {
+      const editor = editorElement();
+      const range = restoreEditorSelection();
+      if (!range) return;
+      const list = document.createElement(tag);
+      const blocks = Array.from(editor.querySelectorAll('p, div, h1, h2, h3, h4, h5, h6, blockquote'))
+        .filter(block => {
+          try { return range.intersectsNode(block); } catch (_) { return false; }
+        });
+
+      if (blocks.length) {
+        blocks[0].before(list);
+        blocks.forEach(block => {
+          const item = document.createElement('li');
+          while (block.firstChild) item.appendChild(block.firstChild);
+          list.appendChild(item);
+          block.remove();
+        });
+      } else {
+        const item = document.createElement('li');
+        if (range.collapsed) item.appendChild(document.createElement('br'));
+        else item.appendChild(range.extractContents());
+        list.appendChild(item);
+        range.insertNode(list);
+      }
+      range.selectNodeContents(list.lastElementChild);
+      savedEditorRange = range.cloneRange();
+    }
+
+    function safeUrl(value, image = false) {
+      const trimmed = value.trim();
+      if (!trimmed) return null;
+      try {
+        const parsed = new URL(trimmed, window.location.origin);
+        if (image) {
+          return (parsed.protocol === 'https:' || parsed.protocol === 'http:' ||
+            (trimmed.startsWith('/uploads/') && parsed.origin === window.location.origin))
+            ? (trimmed.startsWith('//') ? parsed.href : trimmed) : null;
+        }
+        return ['http:', 'https:', 'mailto:'].includes(parsed.protocol)
+          ? (trimmed.startsWith('//') ? parsed.href : trimmed) : null;
+      } catch (_) {
+        return null;
+      }
+    }
+
+    function insertLink() {
+      const entered = prompt('Enter URL:');
+      if (!entered) return;
+      const url = safeUrl(entered);
+      if (!url) {
+        alert('Enter a valid http, https, or mailto link.');
+        return;
+      }
+      const range = restoreEditorSelection();
+      if (!range) return;
+      const link = document.createElement('a');
+      link.href = url;
+      link.rel = 'noopener noreferrer';
+      if (range.collapsed) link.textContent = url;
+      else link.appendChild(range.extractContents());
+      insertAtSelection(link, true);
+    }
+
+    function insertImageNode(url, alt = '') {
+      const image = document.createElement('img');
+      image.src = url;
+      image.alt = alt;
+      image.style.maxWidth = '100%';
+      insertAtSelection(image);
+    }
+
+    function insertImage() {
+      document.getElementById('editor-image-file').click();
+    }
+
+    function showImageUploadMessage(message, kind = 'info') {
+      const box = document.getElementById('editor-image-msg');
+      const styles = {
+        info: ['#eff6ff', '#1d4ed8'],
+        success: ['#dcfce7', '#15803d'],
+        error: ['#fee2e2', '#b91c1c']
+      };
+      [box.style.background, box.style.color] = styles[kind] || styles.info;
+      box.textContent = message;
+      box.style.display = 'block';
+    }
+
+    document.getElementById('editor-image-file').addEventListener('change', async event => {
+      const file = event.target.files && event.target.files[0];
+      event.target.value = '';
+      if (!file) return;
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+      if (!allowedTypes.includes(file.type) || !/\.(jpe?g|png|webp)$/i.test(file.name)) {
+        showImageUploadMessage('Choose a JPG, JPEG, PNG, or WEBP image.', 'error');
+        return;
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        showImageUploadMessage('The image must be 5 MB or smaller.', 'error');
+        return;
+      }
+
+      const editor = editorElement();
+      const previousEditable = editor.contentEditable;
+      const controls = Array.from(document.querySelectorAll('.toolbar-btn, .editor-actions button'));
+      const previousControlStates = controls.map(control => ({ control, disabled: control.disabled }));
+      editor.contentEditable = 'false';
+      controls.forEach(control => { control.disabled = true; });
+      showImageUploadMessage('Uploading image…', 'info');
+      try {
+        const uploaded = await API.media.uploadImage(file);
+        const url = safeUrl(uploaded.url, true);
+        if (!url) throw new Error('The server returned an invalid image URL.');
+        editor.contentEditable = previousEditable;
+        insertImageNode(url, file.name);
+        showImageUploadMessage('Image uploaded and inserted into the blog content.', 'success');
+      } catch (error) {
+        showImageUploadMessage(`Image upload failed: ${error.message || 'Please try again.'}`, 'error');
+      } finally {
+        editor.contentEditable = previousEditable;
+        previousControlStates.forEach(({ control, disabled }) => { control.disabled = disabled; });
+      }
+    });
+
+    function insertCode() {
+      const range = restoreEditorSelection();
+      if (!range) return;
+      const selectedText = range.toString();
+      const pre = document.createElement('pre');
+      const code = document.createElement('code');
+      code.textContent = selectedText || 'code snippet';
+      pre.appendChild(code);
+      insertAtSelection(pre);
+    }
+
+    async function submitPost(status, submitButton) {
+      const title = document.getElementById('post-title').value.trim();
+      const category = document.getElementById('post-category').value;
+      const rawTags = document.getElementById('post-tags').value;
+      const coverImage = document.getElementById('post-image').value.trim();
+      const content = document.getElementById('editor-body').innerHTML.trim();
+      const msgBox = document.getElementById('editor-msg');
+
+      if (!title) {
+        alert('Please provide a title');
+        return;
+      }
+      if (!content || content === '<br>') {
+        alert('Content cannot be empty');
+        return;
+      }
+
+      const tags = rawTags.split(',').map(t => t.trim()).filter(Boolean);
+
+      const payload = {
+        title,
+        category,
+        tags,
+        coverImage: coverImage || 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=800&q=80',
+        content,
+        status
+      };
+
+      const actionButtons = Array.from(document.querySelectorAll('.editor-actions button'));
+      const previousButtonStates = actionButtons.map(button => ({
+        button,
+        disabled: button.disabled,
+        text: button.textContent
+      }));
+      actionButtons.forEach(button => { button.disabled = true; });
+      if (submitButton) {
+        submitButton.textContent = status === 'DRAFT' ? 'Saving draft…' : 'Publishing…';
+      }
+
+      try {
+        let result;
+        if (editId) {
+          result = await API.posts.update(editId, payload);
+          msgBox.textContent = status === 'DRAFT' ? 'Draft updated!' : 'Blog post updated successfully!';
+        } else {
+          result = await API.posts.create(payload);
+          msgBox.textContent = status === 'DRAFT' ? 'Saved as draft!' : 'Article published successfully!';
+        }
+
+        msgBox.style.display = 'block';
+        msgBox.style.background = '#dcfce7';
+        msgBox.style.color = '#15803d';
+
+        setTimeout(() => {
+          window.location.href = `blog-detail.html?id=${editId || result.id || 2}`;
+        }, 1000);
+      } catch (err) {
+        msgBox.style.display = 'block';
+        msgBox.style.background = '#fee2e2';
+        msgBox.style.color = '#b91c1c';
+        msgBox.textContent = `Error: ${err.message || 'The request failed. Please try again.'}`;
+      } finally {
+        previousButtonStates.forEach(({ button, disabled, text }) => {
+          button.disabled = disabled;
+          button.textContent = text;
+        });
+      }
+    }
+  </script>
+</body>
+</html>
